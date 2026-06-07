@@ -26,7 +26,6 @@ RAW (5 sources)
 
 ![Lineage Graph](docs/images/lineage_graph.png)
 
-docs/images/dbt test.png
 
 
 
