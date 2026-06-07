@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: mart_corporate_impact
+    description: "ROI and workforce impact of AI adoption at industry × country × year level"
+    columns:
+      - name: year
+        data_tests:
+          - not_null
+      - name: country
+        data_tests:
+          - not_null
+      - name: industry
+        data_tests:
+          - not_null
+      - name: ai_maturity_tier
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['01_leader', '02_adopter', '03_explorer', '04_laggard']
+      - name: companies_surveyed
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 3"
+
+  - name: mart_country_outlook
+    description: "Country × year transition outlook combining macro and labor data"
+    columns:
+      - name: country
+        data_tests:
+          - not_null
+      - name: year
+        data_tests:
+          - not_null
+      - name: readiness_tier
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['01_leader', '02_competitive', '03_emerging', '04_lagging']
+
+  - name: mart_macro_dashboard
+    description: "Daily AI stocks and macro signals dashboard"
+    columns:
+      - name: date
+        data_tests:
+          - not_null
+          - unique
+      - name: volatility_regime
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Low', 'Medium', 'High']
+
+  - name: mart_sector_risk
+    description: "Sector-level automation risk by country × year"
+    columns:
+      - name: country
+        data_tests:
+          - not_null
+      - name: industry_sector
+        data_tests:
+          - not_null
+      - name: risk_tier
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['01_critical', '02_high', '03_moderate', '04_low']
+      - name: composite_risk_score
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "between 0 and 1"
